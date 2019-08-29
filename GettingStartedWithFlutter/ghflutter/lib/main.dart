@@ -9,6 +9,7 @@ class GHFlutterApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: Strings.appTitle,
+      theme: ThemeData(primaryColor: Colors.green.shade800),
       home: GHFlutter(),
     );
   }
