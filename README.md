@@ -1,2 +1,2 @@
 # Training-RayWenderlichDotCom
-These are files associated with the tutorial found at https://www.raywenderlich.com/
+These are files associated with the tutorials found at https://www.raywenderlich.com/
