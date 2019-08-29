@@ -36,10 +36,10 @@ class GHFlutterState extends State<GHFlutter> {
   }
 
   Widget _buildRow(int i) {
-    return ListTile(
-      title: Text(
-        "${_members[i]["login"]}",
-        style: _biggerFont,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListTile(
+        title: Text("${_members[i]["login"]}", style: _biggerFont),
       ),
     );
   }
@@ -51,10 +51,15 @@ class GHFlutterState extends State<GHFlutter> {
         title: Text(Strings.appTitle),
       ),
       body: ListView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: _members.length,
+          //padding: const EdgeInsets.all(16.0),  //moved to _buildRow
+          itemCount: _members.length * 2,
           itemBuilder: (BuildContext context, int position) {
-            return _buildRow(position);
+            //either return a Divider() or calculated a new index
+            if (position.isOdd) return Divider();
+
+            final index = position ~/ 2;
+
+            return _buildRow(index);
           }),
     );
   }
