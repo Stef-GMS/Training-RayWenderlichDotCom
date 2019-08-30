@@ -53,11 +53,8 @@ class _ChatListPageState extends State<ChatListPage> {
       ),
       body: SafeArea(
         // 1 First, you declare a LayoutBuilder as the child of SafeArea.
-        child: LayoutBuilder(builder: (builder, constraints) {
-          // 2 Second, you determine if you have a details page
-          //   using the maximum width of the parent widget.
-          //   If it is greater than 600, then you have a details page.
-          var hasDetailPage = constraints.maxWidth > 600;
+        child: OrientationBuilder(builder: (builder, orientation) {
+          var hasDetailPage = orientation == Orientation.landscape;
 
           if (hasDetailPage) {
             // 3 Next, if you have a details page, you declare child as a row of widgets.
