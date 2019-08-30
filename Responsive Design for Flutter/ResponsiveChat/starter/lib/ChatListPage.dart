@@ -47,41 +47,37 @@ class _ChatListPageState extends State<ChatListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 1 First, you check the orientation from MediaQuery.
-    //   If it’s landscape, then you have a details page.
-    var hasDetailPage =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-
-    // 2 Second, you declare a child widget to use later.
-    Widget child;
-
-    if (hasDetailPage) {
-      // 3 Next, if you have a details page, you declare the child as a row of widgets.
-      child = Row(
-        children: [
-          // 4 For this, the row contains the list of chats as a first item.
-          SizedBox(
-            width: 250,
-            height: double.infinity,
-            child: _buildList(context, hasDetailPage),
-          ),
-
-          // 5 Then, the next item in the row is the chat page showing the conversation.
-          Expanded(child: _buildChat(context, selectedIndex)),
-        ],
-      );
-    } else {
-      // 6 If you don’t have a details page, the child will be the list of chats.
-      child = _buildList(context, hasDetailPage);
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Chats"),
       ),
       body: SafeArea(
-        // 7 Finally, you need to assign that child widget you created as a child of SafeArea.
-        child: child,
+        // 1 First, you declare a LayoutBuilder as the child of SafeArea.
+        child: LayoutBuilder(builder: (builder, constraints) {
+          // 2 Second, you determine if you have a details page
+          //   using the maximum width of the parent widget.
+          //   If it is greater than 600, then you have a details page.
+          var hasDetailPage = constraints.maxWidth > 600;
+
+          if (hasDetailPage) {
+            // 3 Next, if you have a details page, you declare child as a row of widgets.
+            return Row(
+              children: [
+                // 4 For this, the row contains the list of chats as a first item.
+                SizedBox(
+                  width: 250,
+                  height: double.infinity,
+                  child: _buildList(context, hasDetailPage),
+                ),
+                // 5 Then, the next item in the row is the chat page showing the conversation.
+                Expanded(child: _buildChat(context, selectedIndex)),
+              ],
+            );
+          } else {
+            // 6 Finally, if you don’t have a details page, it’ll be the list of chats.
+            return _buildList(context, hasDetailPage);
+          }
+        }),
       ),
     );
   }
