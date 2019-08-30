@@ -47,13 +47,41 @@ class _ChatListPageState extends State<ChatListPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 1 First, you check the orientation from MediaQuery.
+    //   If it’s landscape, then you have a details page.
+    var hasDetailPage =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    // 2 Second, you declare a child widget to use later.
+    Widget child;
+
+    if (hasDetailPage) {
+      // 3 Next, if you have a details page, you declare the child as a row of widgets.
+      child = Row(
+        children: [
+          // 4 For this, the row contains the list of chats as a first item.
+          SizedBox(
+            width: 250,
+            height: double.infinity,
+            child: _buildList(context, hasDetailPage),
+          ),
+
+          // 5 Then, the next item in the row is the chat page showing the conversation.
+          Expanded(child: _buildChat(context, selectedIndex)),
+        ],
+      );
+    } else {
+      // 6 If you don’t have a details page, the child will be the list of chats.
+      child = _buildList(context, hasDetailPage);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Chats"),
       ),
       body: SafeArea(
-        // TODO: show responsive layout here
-        child: Container(),
+        // 7 Finally, you need to assign that child widget you created as a child of SafeArea.
+        child: child,
       ),
     );
   }
@@ -64,8 +92,8 @@ class _ChatListPageState extends State<ChatListPage> {
     return ListView.separated(
       itemCount: chat.conversations.length,
       separatorBuilder: (context, index) => Divider(
-            color: Colors.black.withAlpha(50),
-          ),
+        color: Colors.black.withAlpha(50),
+      ),
       itemBuilder: (context, index) {
         Conversation conversation = chat.conversations[index];
         List<User> users =
