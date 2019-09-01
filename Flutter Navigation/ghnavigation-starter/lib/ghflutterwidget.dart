@@ -44,12 +44,34 @@ class GHFlutterState extends State<GHFlutterWidget> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   _pushMember(Member member) {
-    // Using Navigator to push a new MaterialPageRoute
-    // onto the stack, and you build the MaterialPageRoute
-    // using a MemberWidget.
+    // 1 Push a new PageRouteBuilder onto the stack.
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MemberWidget(member)));
-  }
+      context,
+      PageRouteBuilder(
+        opaque: true,
+
+        // 2 Specify the duration using transitionDuration.
+        transitionDuration: const Duration(milliseconds: 1000),
+
+        // 3 Create the MemberWidget screen using pageBuilder.
+        pageBuilder: (BuildContext context, _, __) {
+          return MemberWidget(member);
+        }, // pageBuilder:
+
+        // 4 Use the transitionsBuilder to create fade and rotation
+        // transitions when showing the new route.
+        transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+          return FadeTransition(
+            opacity: animation,
+            child: RotationTransition(
+              turns: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+              child: child,
+            ),
+          );
+        }, // transitionsBuilder:
+      ),
+    ); // Navigator.push
+  } //pushMember
 
   @override
   void initState() {
