@@ -36,11 +36,20 @@ import 'package:http/http.dart' as http;
 
 import 'member.dart';
 import 'strings.dart';
+import 'memberwidget.dart';
 
 class GHFlutterState extends State<GHFlutterWidget> {
   var _members = <Member>[];
 
   final _biggerFont = const TextStyle(fontSize: 18.0);
+
+  _pushMember(Member member) {
+    // Using Navigator to push a new MaterialPageRoute
+    // onto the stack, and you build the MaterialPageRoute
+    // using a MemberWidget.
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MemberWidget(member)));
+  }
 
   @override
   void initState() {
@@ -69,13 +78,19 @@ class GHFlutterState extends State<GHFlutterWidget> {
 
   Widget _buildRow(int i) {
     return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListTile(
-          title: Text("${_members[i].login}", style: _biggerFont),
-          leading: CircleAvatar(
-              backgroundColor: Colors.green,
-              backgroundImage: NetworkImage(_members[i].avatarUrl)),
-        ));
+      padding: const EdgeInsets.all(16.0),
+      child: ListTile(
+        title: Text("${_members[i].login}", style: _biggerFont),
+        leading: CircleAvatar(
+          backgroundColor: Colors.green,
+          backgroundImage: NetworkImage(_members[i].avatarUrl),
+        ),
+        onTap: () {
+          // when a row is tapped the details screen opens
+          _pushMember(_members[i]);
+        },
+      ),
+    );
   }
 
   _loadData() async {
