@@ -43,22 +43,23 @@ class ZomatoClient {
   final _contextRoot = 'api/v2.1';
 
   Future<List<Location>> fetchLocations(String query) async {
-    final results = await request(
-        path: 'locations', parameters: {'query': query, 'count': '10'});
+    final results = await request(path: 'locations', parameters: {
+      'query': query,
+      'count': '10',
+    });
 
     final suggestions = results['location_suggestions'];
-    return suggestions
-        .map<Location>((json) => Location.fromJson(json))
-        .toList(growable: false);
+    return suggestions.map<Location>((json) => Location.fromJson(json)).toList(
+          growable: false,
+        );
   }
 
-  Future<List<Restaurant>> fetchRestaurants(
-      Location location, String query) async {
+  Future<List<Restaurant>> fetchRestaurants(Location location, String query) async {
     final results = await request(path: 'search', parameters: {
       'entity_id': location.id.toString(),
       'entity_type': location.type,
       'q': query,
-      'count': '10'
+      'count': '10',
     });
 
     final restaurants = results['restaurants']
@@ -68,14 +69,15 @@ class ZomatoClient {
     return restaurants;
   }
 
-  Future<Map> request(
-      {@required String path, Map<String, String> parameters}) async {
+  Future<Map> request({@required String path, Map<String, String> parameters}) async {
     final uri = Uri.https(_host, '$_contextRoot/$path', parameters);
     final results = await http.get(uri, headers: _headers);
     final jsonObject = json.decode(results.body);
     return jsonObject;
   }
 
-  Map<String, String> get _headers =>
-      {'Accept': 'application/json', 'user-key': _apiKey};
+  Map<String, String> get _headers => {
+        'Accept': 'application/json',
+        'user-key': _apiKey,
+      };
 }
